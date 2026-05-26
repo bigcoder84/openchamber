@@ -1,0 +1,24 @@
+packages/ui/src/components/layout/ContextPanel.tsx
+  658109ed4f0f13d0 1924,1945
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.14-trip",
+  "base_commit_sha": "a802f994abe4c0d576fb9dd5f08fb96ba6be2723",
+  "prompts": {
+    "658109ed4f0f13d0": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_1a1958026ffeLTueyI1iO9qYp7",
+        "model": "ada-openai-compatible/kimi-k2.6",
+        "ide_version": null
+      },
+      "human_author": "bigcoder84 <bigcoder84@gmail.com>",
+      "messages": [],
+      "total_additions": 2,
+      "total_deletions": 0,
+      "accepted_lines": 2,
+      "overriden_lines": 0
+    }
+  }
+}
