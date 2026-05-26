@@ -1,0 +1,25 @@
+packages/ui/src/components/layout/ContextPanel.tsx
+  ai_agent 1685-1690,1917,1919-1923,1926-1938,1952-1953
+  658109ed4f0f13d0 1924,1945
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.14-trip",
+  "base_commit_sha": "e166d9672a3fee8ade46ced9573925894995fa7e",
+  "prompts": {
+    "658109ed4f0f13d0": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_1a1958026ffeLTueyI1iO9qYp7",
+        "model": "ada-openai-compatible/kimi-k2.6",
+        "ide_version": null
+      },
+      "human_author": "bigcoder84 <bigcoder84@gmail.com>",
+      "messages": [],
+      "total_additions": 2,
+      "total_deletions": 0,
+      "accepted_lines": 2,
+      "overriden_lines": 0
+    }
+  }
+}
