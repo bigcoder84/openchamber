@@ -1,0 +1,24 @@
+packages/web/server/lib/quota/utils/transformers.js
+  s_96e02e9d243067::t_b8bd9ef711ab4f 38-39
+packages/web/server/lib/quota/providers/zhipuai-coding-plan.js
+  s_96e02e9d243067::t_2390bbcfcae3d2 108,113-114,116,120
+  s_96e02e9d243067::t_7984ea104086f3 36
+packages/vscode/src/quotaProviders.ts
+  s_96e02e9d243067::t_755de7c0df2ec1 1600,1605-1606,1608,1612
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.24-trip",
+  "base_commit_sha": "73441e51585d33c9c2123b77df129f427cc1fd76",
+  "prompts": {},
+  "sessions": {
+    "s_96e02e9d243067": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f3c5c1d0ffe9Cyl6Y0vhG6drk",
+        "model": "glm-5.2"
+      },
+      "human_author": "bigcoder84 <bigcoder84@gmail.com>"
+    }
+  }
+}
