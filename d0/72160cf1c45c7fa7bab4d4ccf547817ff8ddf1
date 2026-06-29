@@ -1,0 +1,148 @@
+packages/android/scripts/prepare-web-assets.mjs
+  s_d79893913b389d::t_a6db458c5341c8 1-23
+packages/ui/src/lib/i18n/messages/pl.ts
+  s_d79893913b389d::t_421c684253d7dd 64-66
+  s_d79893913b389d::t_bfdac9d3ebeb94 63
+  s_d79893913b389d::t_9fecf51ff91646 49-62,67-68
+packages/ui/src/apps/renderMobileApp.tsx
+  s_0b2638c9117322::t_1d5985c33cb3e3 53-55
+  s_d79893913b389d::t_a97b868796dcc1 17,52,56
+packages/android/README.md
+  s_d79893913b389d::t_6a6ef75a90917d 11,18-23
+  s_d79893913b389d::t_4a1ac9b5c20718 1-4,6-10,12-17,24
+  s_d79893913b389d::t_0141efd7c53bb4 5
+packages/android/android/app/src/main/res/drawable/ic_launcher.xml
+  s_d79893913b389d::t_4a1ac9b5c20718 1-13
+packages/android/.gitignore
+  s_d79893913b389d::t_5585fc3f620e3e 5
+  s_d79893913b389d::t_738286a615732d 1-4,7,11-12
+  s_d79893913b389d::t_4a535e5f5100fd 8-9
+  s_d79893913b389d::t_0141efd7c53bb4 6
+  s_0b2638c9117322::t_b900a78733a17e 10
+packages/ui/src/lib/i18n/messages/zh-CN.ts
+  s_d79893913b389d::t_bfdac9d3ebeb94 62
+  s_d79893913b389d::t_57928b307b4423 48-61,66-67
+  s_d79893913b389d::t_421c684253d7dd 63-65
+packages/ui/src/lib/i18n/messages/ja.ts
+  s_d79893913b389d::t_421c684253d7dd 63-65
+  s_d79893913b389d::t_bfdac9d3ebeb94 62
+  s_d79893913b389d::t_9fecf51ff91646 48-61,66-67
+packages/android/android/settings.gradle
+  s_d79893913b389d::t_4a1ac9b5c20718 1-10
+packages/ui/src/lib/i18n/messages/zh-TW.ts
+  s_d79893913b389d::t_421c684253d7dd 63-65
+  s_d79893913b389d::t_57928b307b4423 48-61,66-67
+  s_d79893913b389d::t_bfdac9d3ebeb94 62
+packages/android/android/app/build.gradle
+  s_0b2638c9117322::t_896067547acbd3 2-4,7-8,11,13-14,18-19
+  s_d79893913b389d::t_6f0d7ca177642e 1
+  s_d79893913b389d::t_4a1ac9b5c20718 5-6,9-10,12,15-17
+packages/ui/src/apps/MobileApp.tsx
+  s_d79893913b389d::t_cec02650131764 783
+  s_d79893913b389d::t_730ad7c15b30ae 1587-1620,1622-1627
+  s_d79893913b389d::t_ca2354f71e9b3a 504-508,510,512-513,515-534,536-546,558,564-642,644-647,654-655,667-704,730-736,738-743,745,747-750,775-778,780-782,790-791,793,804-820
+  s_d79893913b389d::t_210001f5079865 511,514,559-563,746
+  s_d79893913b389d::t_0f18a9a598ca79 509,547-557,643,648-651,653,656-666,705-713,717-718,744,779,784-789,792,794-803,1621
+  s_d79893913b389d::t_e0813835ef88de 79-92,96-123,148
+  s_d79893913b389d::t_ebc6339c358af6 535,652
+  s_d79893913b389d::t_f5c128eecc8320 719-729,751-769,771-774
+  s_d79893913b389d::t_31137b44ce34aa 737,1160-1161,1176-1179,1275-1280,1291,1316
+  s_d79893913b389d::t_c3bc28aefd106c 714-716
+  s_d79893913b389d::t_6a0e1fc89d0311 770
+packages/android/android/gradle.properties
+  s_d79893913b389d::t_4a1ac9b5c20718 1-3
+packages/android/package.json
+  s_d79893913b389d::t_4ecbc9c617c4d0 8
+  s_d79893913b389d::t_6a6ef75a90917d 10-11
+  s_0b2638c9117322::t_438f62cfe69fb7 1-4,6,12-13
+  s_d79893913b389d::t_bd4e843d9a0901 5,7
+  s_d79893913b389d::t_40780c705fd9e7 9
+packages/ui/src/lib/i18n/messages/fr.ts
+  s_d79893913b389d::t_9fecf51ff91646 2465-2478,2483-2484
+  s_d79893913b389d::t_bfdac9d3ebeb94 2479
+  s_d79893913b389d::t_421c684253d7dd 2480-2482
+packages/ui/src/lib/i18n/messages/en.ts
+  s_d79893913b389d::t_421c684253d7dd 62-64
+  s_d79893913b389d::t_57928b307b4423 47-60,65-66
+  s_d79893913b389d::t_bfdac9d3ebeb94 61
+packages/ui/src/lib/i18n/messages/es.ts
+  s_d79893913b389d::t_1fac54b176c36e 48-61,66-67
+  s_d79893913b389d::t_421c684253d7dd 63-65
+  s_d79893913b389d::t_bfdac9d3ebeb94 62
+packages/ui/src/lib/i18n/messages/uk.ts
+  s_d79893913b389d::t_bfdac9d3ebeb94 62
+  s_d79893913b389d::t_1fac54b176c36e 48-61,66-67
+  s_d79893913b389d::t_421c684253d7dd 63-65
+packages/android/android/app/src/main/res/values/styles.xml
+  s_d79893913b389d::t_ea4eb488a40c18 4-6
+  s_d79893913b389d::t_4a1ac9b5c20718 1-3,7-9
+packages/android/scripts/verify-apk.mjs
+  s_d79893913b389d::t_6a6ef75a90917d 1-36,39-45
+  s_d79893913b389d::t_bd4e843d9a0901 37-38
+.gitignore
+  s_d79893913b389d::t_8a864699655cb2 67
+packages/android/android/app/src/main/AndroidManifest.xml
+  s_d79893913b389d::t_4a1ac9b5c20718 3-18
+  s_d79893913b389d::t_4ecbc9c617c4d0 2
+packages/android/android/app/src/main/res/xml/network_security_config.xml
+  s_d79893913b389d::t_4a1ac9b5c20718 1-9
+packages/android/android/build.gradle
+  s_d79893913b389d::t_4a1ac9b5c20718 9
+  s_d79893913b389d::t_6f0d7ca177642e 1-8
+packages/android/android/app/src/main/res/values/strings.xml
+  s_d79893913b389d::t_e0a1292d505d2f 3
+  s_0b2638c9117322::t_896067547acbd3 1-2,4
+packages/ui/src/lib/i18n/messages/ko.ts
+  s_d79893913b389d::t_421c684253d7dd 63-65
+  s_d79893913b389d::t_bfdac9d3ebeb94 62
+  s_d79893913b389d::t_9fecf51ff91646 48-61,66-67
+packages/android/android/app/src/main/java/ai/openchamber/mobile/MainActivity.java
+  s_d79893913b389d::t_d7fcea46d051d1 27-28,30,33-35,37,40,53,57-58,64,66,69-74,80-81,156,165-170,197-203,252-257,260-261,264-266,268-273,275,278,283-284,288-294,297-302,323-341,344-358,364,424,427,448,456-458,460,463-473,476-480,484-485,488-489,492-508,511-512,515-546,548-552,564-565,567-570,572-583,587-590,592-600,602-603,605-614,617-619,621-622,629-635,639-640,642-648,650-656,659-677,680,682-697,700-779,782-787,789-802,806,820,824,840
+  s_d79893913b389d::t_eedbb4d71edf21 67
+  s_d79893913b389d::t_e0a1292d505d2f 185
+  s_d79893913b389d::t_cfc520db90514f 14,91-94,96-101,103,106-153,173,186,189-194,209-249
+  s_d79893913b389d::t_de4fa9c6c0b0a3 87
+  s_d79893913b389d::t_93f95c86a11307 657-658
+  s_d79893913b389d::t_e50a4d86d0637b 258-259,279-282,285,303-320
+  s_d79893913b389d::t_ea4eb488a40c18 615-616,620,623-628
+  s_d79893913b389d::t_fc6bda78cad73c 553-563,601,604
+  s_0b2638c9117322::t_896067547acbd3 1-2,22
+  s_d79893913b389d::t_885f990e9d7a51 9,11,102,104-105
+  s_d79893913b389d::t_90f0b91f647a5a 377-416,445-447
+  s_d79893913b389d::t_7ed4525077e52c 417-422,547
+  s_d79893913b389d::t_de65eeb14b98f2 3-8,10,12-13,15-21,23-26,29,31-32,36,38-39,41-52,54-56,59-63,65,68,75-79,82-86,88-90,95,154-155,157-164,171-172,174-184,187-188,195-196,204-206,208,250-251,262-263,267,274,276-277,295-296,321-322,342-343,359-363,365-376,423,425-426,428-444,449-455,459,461-462,474-475,481-483,486-487,490-491,509-510,513-514,566,571,584-586,591,636-638,641,649,678-679,681,698-699,780-781,788,803-805,807-819,821-823,825-839,841-849
+  s_d79893913b389d::t_8ad071dc67337c 207
+packages/ui/src/lib/i18n/messages/pt-BR.ts
+  s_d79893913b389d::t_bfdac9d3ebeb94 62
+  s_d79893913b389d::t_421c684253d7dd 63-65
+  s_d79893913b389d::t_1fac54b176c36e 48-61,66-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.24-trip",
+  "base_commit_sha": "d072160cf1c45c7fa7bab4d4ccf547817ff8ddf1",
+  "prompts": {},
+  "humans": {
+    "h_0eaaf16e4270da": {
+      "author": "bigcoder84 <bigcoder84@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_0b2638c9117322": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f2f078fdffeqa2L4d916JbLBa",
+        "model": "glm-5.2"
+      },
+      "human_author": "bigcoder84 <bigcoder84@gmail.com>"
+    },
+    "s_d79893913b389d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f1294-da18-7080-a449-092244349952",
+        "model": "gpt-5.5"
+      },
+      "human_author": "bigcoder84 <bigcoder84@gmail.com>"
+    }
+  }
+}
