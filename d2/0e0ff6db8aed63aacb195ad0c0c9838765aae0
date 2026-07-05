@@ -1,0 +1,66 @@
+packages/ui/src/apps/MobileApp.tsx
+  s_d79893913b389d::t_c22c64a7d1909f 1201,1203,1205-1206,1404,1436-1438
+  s_d79893913b389d::t_741bea1c8eec0b 15,94-95,142-149
+  s_d79893913b389d::t_9ea72fef51aa19 96-97,101-104,107-112
+  s_d79893913b389d::t_af0417527acf7c 105-106
+  s_d79893913b389d::t_aaecb60ec74d81 152-180
+  s_d79893913b389d::t_5e48c1750e9812 1212,1224-1232
+  s_d79893913b389d::t_190274a4e880a7 1202,1204,1395-1403,1405-1435
+  s_d79893913b389d::t_c7e7d156cafea0 736-737,739,763,768,774-776,778-787,789-790,792-796,800-851,939
+  s_d79893913b389d::t_bd00c951858d32 455-458
+  s_d79893913b389d::t_fa7a25cf7388b4 738,740-762,764-767,769-773,777,788,791,797-799
+packages/ui/src/lib/i18n/messages/en.ts
+  s_d79893913b389d::t_8b6627da2e3d4d 63,67-69
+packages/ui/src/lib/i18n/messages/ja.ts
+  s_d79893913b389d::t_8b6627da2e3d4d 64,68-70
+packages/ui/src/lib/i18n/messages/ko.ts
+  s_d79893913b389d::t_8b6627da2e3d4d 64,68-70
+packages/ui/src/lib/i18n/messages/pt-BR.ts
+  s_d79893913b389d::t_8b6627da2e3d4d 64,68-70
+packages/ui/src/lib/i18n/runtime.ts
+  s_d79893913b389d::t_38a23ec5cada84 86-94,111,114-117
+  s_d79893913b389d::t_797d942e728562 26-38,113,119
+packages/ui/src/lib/i18n/messages/pl.ts
+  s_d79893913b389d::t_8b6627da2e3d4d 65,69-71
+packages/ui/src/lib/i18n/messages/zh-TW.ts
+  s_d79893913b389d::t_8b6627da2e3d4d 64,68-70
+packages/ui/src/lib/i18n/messages/fr.ts
+  s_d79893913b389d::t_8b6627da2e3d4d 2481,2485-2487
+packages/android/android/app/src/main/AndroidManifest.xml
+  s_d79893913b389d::t_54682886e33ab9 10
+packages/android/android/app/src/main/java/ai/openchamber/mobile/MainActivity.java
+  s_d79893913b389d::t_5e9f1105b9191a 116-123
+  s_d79893913b389d::t_f9466a4efa70bf 20-21,63,74,86-89,97-109,126
+  s_d79893913b389d::t_4e0c4a31d68344 55-56,110-115,124-125,127-128,291-306
+packages/ui/src/lib/i18n/messages/zh-CN.ts
+  s_d79893913b389d::t_8b6627da2e3d4d 64,68-70
+packages/ui/src/components/auth/SessionAuthGate.tsx
+  s_d79893913b389d::t_7b4d2fe962f95d 258,270,648
+packages/ui/src/lib/i18n/messages/es.ts
+  s_d79893913b389d::t_8b6627da2e3d4d 64,68-70
+packages/ui/src/apps/renderMobileApp.tsx
+  s_d79893913b389d::t_1687494505aec3 17,53
+packages/ui/src/lib/i18n/messages/uk.ts
+  s_d79893913b389d::t_8b6627da2e3d4d 64,68-70
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.29-trip",
+  "base_commit_sha": "d20e0ff6db8aed63aacb195ad0c0c9838765aae0",
+  "prompts": {},
+  "humans": {
+    "h_0eaaf16e4270da": {
+      "author": "bigcoder84 <bigcoder84@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_d79893913b389d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f1294-da18-7080-a449-092244349952",
+        "model": "gpt-5.5"
+      },
+      "human_author": "bigcoder84 <bigcoder84@gmail.com>"
+    }
+  }
+}
