@@ -1,0 +1,34 @@
+packages/ui/src/apps/MobileApp.tsx
+  s_d79893913b389d::t_e6d15d07252abc 2195-2197,2229-2230,2233,2235,2238,2240,2245,2256,2261,2285,2291,2295,2306,2339-2363,2365-2396,2399,2401-2403,2407,2411,2415,2419-2427,2431,2435,2437-2446,2448,2497-2498,2518-2543,2551-2554,2560,2566-2567
+packages/web/server/index.js
+  s_0b2638c9117322::t_7d30e149918bec 1137
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.29-trip",
+  "base_commit_sha": "aea708a9ea4eccbc4929c4e9dc0aec32a328c9ad",
+  "prompts": {},
+  "humans": {
+    "h_0eaaf16e4270da": {
+      "author": "bigcoder84 <bigcoder84@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_0b2638c9117322": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f2f078fdffeqa2L4d916JbLBa",
+        "model": "glm-5.2"
+      },
+      "human_author": "bigcoder84 <bigcoder84@gmail.com>"
+    },
+    "s_d79893913b389d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f1294-da18-7080-a449-092244349952",
+        "model": "gpt-5.5"
+      },
+      "human_author": "bigcoder84 <bigcoder84@gmail.com>"
+    }
+  }
+}
