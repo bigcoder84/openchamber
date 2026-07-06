@@ -1,0 +1,52 @@
+packages/android/android/app/src/main/java/ai/openchamber/mobile/MainActivity.java
+  s_2068a577395fc4::t_5e241a0033daf6 602-617
+packages/ui/src/lib/i18n/messages/ko.ts
+  s_2068a577395fc4::t_32ae34e32e3e76 92-93,104-106,115
+packages/ui/src/lib/i18n/messages/ja.ts
+  s_2068a577395fc4::t_6d14eb183cf95d 92-93,104-106,115
+packages/ui/src/lib/i18n/messages/zh-TW.ts
+  s_2068a577395fc4::t_e686e4d2d154ec 92-93,104-106,115
+packages/ui/src/lib/i18n/messages/zh-CN.ts
+  s_2068a577395fc4::t_2b88dbf7ca7ab5 92-93,104-106,115
+packages/ui/src/lib/i18n/messages/pt-BR.ts
+  s_2068a577395fc4::t_a4d09b7fe59351 92-93,104-106,115
+packages/ui/src/lib/i18n/messages/uk.ts
+  s_2068a577395fc4::t_436724f0370156 92-93,104-106,115
+packages/ui/src/lib/i18n/messages/pl.ts
+  s_2068a577395fc4::t_8ad5a296d11637 93-94,105-107,116
+packages/ui/src/lib/i18n/messages/es.ts
+  s_2068a577395fc4::t_7056a4e8e09e05 92-93,104-106,115
+packages/ui/src/apps/MobileApp.tsx
+  s_2068a577395fc4::t_1226c186c14c19 893-896
+  s_2068a577395fc4::t_6d25b9fcefdd31 953-956,963-970,972,974-987,991,994,1004-1005,1008-1011,1014,1016-1022,1024-1029,1031-1056
+  s_2068a577395fc4::t_2e14c393da249a 1115,1123,1168-1171,1176,1178-1179,1183-1191,1197-1200,1208,1243,1246-1251
+  s_2068a577395fc4::t_d3eb4311e3d216 703-704,708-718,725-750,765-783,809-812,815,820-825,877-880,882-886,888,898,924,927-932
+  s_2068a577395fc4::t_e12fdf64fb9798 923,925-926,933,1242,1244-1245,1252
+  s_2068a577395fc4::t_a4d0bee6a7e9ba 2399,2402,2440,2445,2450,2452-2455,2460,2490,2492
+  s_2068a577395fc4::t_c5db1fca036eed 2663,2667,2771,2786
+packages/ui/src/lib/i18n/messages/fr.ts
+  s_2068a577395fc4::t_d1b3f24adafbad 2525-2526,2537-2539,2548
+packages/ui/src/lib/i18n/messages/en.ts
+  s_2068a577395fc4::t_cdabccc35565d2 91-92,103-105,114
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.29-trip",
+  "base_commit_sha": "9c217c0f8d18ea3e37d6c1a7a552fdfca2ebb5a8",
+  "prompts": {},
+  "humans": {
+    "h_0eaaf16e4270da": {
+      "author": "bigcoder84 <bigcoder84@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_2068a577395fc4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f353d-fa83-7e32-b11a-301d1d55cb98",
+        "model": "gpt-5.5"
+      },
+      "human_author": "bigcoder84 <bigcoder84@gmail.com>"
+    }
+  }
+}
