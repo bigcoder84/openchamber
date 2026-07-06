@@ -700,16 +700,54 @@ type AndroidServerLoginProps = {
   onConnected: (state: AndroidState) => void;
   onStateChanged?: (state: AndroidState) => void;
   onCancel?: () => void;
+  initialEditingServer?: AndroidServer | null;
+  onEditFinished?: () => void;
   embedded?: boolean;
 };
 
-const AndroidServerLogin: React.FC<AndroidServerLoginProps> = ({ title, description, servers, onConnected, onStateChanged, onCancel, embedded = false }) => {
+const AndroidServerLogin: React.FC<AndroidServerLoginProps> = ({
+  title,
+  description,
+  servers,
+  onConnected,
+  onStateChanged,
+  onCancel,
+  initialEditingServer = null,
+  onEditFinished,
+  embedded = false,
+}) => {
   const { t } = useI18n();
   const [url, setUrl] = React.useState('');
   const [label, setLabel] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [status, setStatus] = React.useState<string | null>(null);
   const [busy, setBusy] = React.useState(false);
+  const [editingServer, setEditingServer] = React.useState<AndroidServer | null>(initialEditingServer);
+
+  React.useEffect(() => {
+    setEditingServer(initialEditingServer);
+    setUrl(initialEditingServer?.url ?? '');
+    setLabel(initialEditingServer?.label ?? '');
+    setPassword(initialEditingServer?.password ?? '');
+    setStatus(null);
+  }, [initialEditingServer]);
+
+  const clearForm = React.useCallback(() => {
+    setUrl('');
+    setLabel('');
+    setPassword('');
+    setStatus(null);
+    setEditingServer(null);
+    onEditFinished?.();
+  }, [onEditFinished]);
+
+  const editServer = React.useCallback((server: AndroidServer) => {
+    setEditingServer(server);
+    setUrl(server.url);
+    setLabel(server.label);
+    setPassword(server.password || '');
+    setStatus(null);
+  }, []);
 
   const connect = React.useCallback(async () => {
     if (!url.trim()) return;
@@ -723,6 +761,25 @@ const AndroidServerLogin: React.FC<AndroidServerLoginProps> = ({ title, descript
     }
     onConnected(result.state);
   }, [label, onConnected, password, t, url]);
+
+  const saveEditingServer = React.useCallback(async () => {
+    if (!editingServer || !url.trim()) return;
+    setBusy(true);
+    setStatus(null);
+    const result = await postAndroidJson('/__android/update-server', {
+      id: editingServer.id,
+      url,
+      label,
+      password,
+    });
+    setBusy(false);
+    if (!result.ok) {
+      setStatus(result.message);
+      return;
+    }
+    onStateChanged?.(result.state);
+    clearForm();
+  }, [clearForm, editingServer, label, onStateChanged, password, url]);
 
   const connectSavedServer = React.useCallback(async (server: AndroidServer) => {
     setBusy(true);
@@ -749,16 +806,23 @@ const AndroidServerLogin: React.FC<AndroidServerLoginProps> = ({ title, descript
 
   return (
     <div
-      className={cn('flex flex-col bg-background text-foreground', embedded ? 'min-h-0' : 'min-h-[100dvh]')}
+      className={cn(
+        'flex flex-col bg-background text-foreground',
+        embedded ? 'h-full min-h-0 overflow-y-auto' : 'h-[100dvh] overflow-y-auto',
+      )}
       style={embedded ? undefined : { paddingTop: 'var(--oc-safe-area-top, 0px)' }}
     >
-      <main className={cn('mx-auto flex w-full max-w-md flex-1 flex-col gap-5', embedded ? 'px-2 py-2' : 'justify-center px-5 py-8')}>
+      <main className={cn('mx-auto flex w-full max-w-md shrink-0 flex-col gap-5', embedded ? 'px-2 py-2' : 'px-5 py-8')}>
         <div className="space-y-2 text-center">
           <div className="mx-auto flex size-14 items-center justify-center rounded-2xl border border-border/50 bg-[var(--surface-elevated)] text-foreground">
             <Icon name="server" className="size-7" />
           </div>
-          <h1 className="typography-ui-header text-xl font-semibold text-foreground">{title}</h1>
-          <p className="typography-meta text-muted-foreground">{description}</p>
+          <h1 className="typography-ui-header text-xl font-semibold text-foreground">
+            {editingServer ? t('mobile.android.edit.title') : title}
+          </h1>
+          <p className="typography-meta text-muted-foreground">
+            {editingServer ? t('mobile.android.edit.description') : description}
+          </p>
         </div>
 
         <section className="space-y-4 rounded-2xl border border-border/50 bg-[var(--surface-elevated)] p-4">
@@ -810,18 +874,28 @@ const AndroidServerLogin: React.FC<AndroidServerLoginProps> = ({ title, descript
               type="button"
               className="flex h-11 flex-1 items-center justify-center rounded-xl bg-primary px-4 typography-ui-label font-medium text-primary-foreground disabled:opacity-60"
               disabled={busy || !url.trim()}
-              onClick={() => void connect()}
+              onClick={() => {
+                if (editingServer) void saveEditingServer();
+                else void connect();
+              }}
             >
-              {busy ? t('mobile.android.action.connecting') : t('mobile.android.action.connect')}
+              {busy
+                ? t('mobile.android.action.connecting')
+                : editingServer
+                  ? t('mobile.android.action.save')
+                  : t('mobile.android.action.connect')}
             </button>
-            {onCancel ? (
+            {editingServer || onCancel ? (
               <button
                 type="button"
                 className="h-11 rounded-xl border border-border/60 px-4 typography-ui-label text-foreground"
                 disabled={busy}
-                onClick={onCancel}
+                onClick={() => {
+                  if (editingServer) clearForm();
+                  else onCancel?.();
+                }}
               >
-                {t('mobile.android.action.cancel')}
+                {editingServer ? t('mobile.android.action.cancelEdit') : t('mobile.android.action.cancel')}
               </button>
             ) : null}
           </div>
@@ -846,6 +920,17 @@ const AndroidServerLogin: React.FC<AndroidServerLoginProps> = ({ title, descript
                     <span className="block truncate typography-ui-label text-foreground">{server.label || server.url}</span>
                     <span className="block truncate typography-micro text-muted-foreground">{server.url}</span>
                   </button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="flex size-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-interactive-hover hover:text-foreground disabled:opacity-60"
+                    aria-label={`${t('mobile.android.action.edit')} ${server.label || server.url}`}
+                    disabled={busy}
+                    onClick={() => editServer(server)}
+                  >
+                    <Icon name="edit" className="size-4" />
+                  </Button>
                   <button
                     type="button"
                     className="flex size-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-interactive-hover hover:text-foreground disabled:opacity-60"
@@ -865,39 +950,48 @@ const AndroidServerLogin: React.FC<AndroidServerLoginProps> = ({ title, descript
   );
 };
 
-const AndroidServerReachabilityBadge: React.FC<{ enabled: boolean }> = ({ enabled }) => {
+const AndroidServerStatusButton: React.FC<{
+  enabled: boolean;
+  onClick: () => void;
+}> = ({ enabled, onClick }) => {
   const { t } = useI18n();
   const { snapshot } = useAndroidHealth(enabled);
 
   if (!enabled) return null;
 
-  const label = getAndroidHealthLabel(snapshot.status, t);
-  const displayLabel = snapshot.status === 'online' && snapshot.latencyMs !== null
-    ? `${label} · ${formatAndroidHealthLatency(snapshot.latencyMs, t)}`
-    : label;
-
   return (
-    <span className="inline-flex min-w-0 items-center gap-1.5 rounded-full border border-border/40 bg-background px-2 py-0.5 typography-micro text-muted-foreground">
+    <button
+      type="button"
+      className="relative flex size-10 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-interactive-hover hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      aria-label={t('mobile.android.health.openAria')}
+      onClick={onClick}
+      style={{ touchAction: 'manipulation' }}
+    >
+      <Icon name="server" className="size-5" />
       <span
-        className={cn(
-          'size-2 shrink-0 rounded-full',
-          snapshot.status === 'online' && 'bg-[var(--status-success)]',
-          snapshot.status === 'offline' && 'bg-[var(--status-error)]',
-          snapshot.status === 'checking' && 'bg-[var(--status-warning)]',
-        )}
+        className="absolute right-1.5 top-1.5 flex size-3 items-center justify-center rounded-full bg-background"
         aria-hidden
-      />
-      <span className="truncate">{displayLabel}</span>
-    </span>
+      >
+        <span
+          className={cn(
+            'size-2 rounded-full',
+            snapshot.status === 'online' && 'bg-[var(--status-success)]',
+            snapshot.status === 'offline' && 'bg-[var(--status-error)]',
+            snapshot.status === 'checking' && 'bg-[var(--status-warning)]',
+          )}
+        />
+        {snapshot.status === 'online' ? (
+          <span className="absolute size-2 rounded-full bg-[var(--status-success)] opacity-30" />
+        ) : null}
+      </span>
+    </button>
   );
 };
 
-const AndroidServerHealthButton: React.FC<{
+const AndroidServerHealthSummary: React.FC<{
   enabled: boolean;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
   currentServer: AndroidServer | null;
-}> = ({ currentServer, enabled, onOpenChange, open }) => {
+}> = ({ currentServer, enabled }) => {
   const { t } = useI18n();
   const { snapshot, refresh, isRefreshing } = useAndroidHealth(enabled);
 
@@ -907,94 +1001,59 @@ const AndroidServerHealthButton: React.FC<{
   const checkedAt = formatAndroidHealthCheckedAt(snapshot.checkedAt);
 
   return (
-    <>
-      <button
-        type="button"
-        className="relative flex size-10 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-interactive-hover hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-        aria-label={t('mobile.android.health.openAria')}
-        aria-expanded={open}
-        onClick={() => onOpenChange(!open)}
-        style={{ touchAction: 'manipulation' }}
-      >
-        <Icon name="server" className="size-5" />
+    <section className="space-y-3 rounded-xl border border-border/40 bg-[var(--surface-elevated)] p-3">
+      <div className="flex items-center gap-3">
         <span
           className={cn(
-            'absolute right-1.5 top-1.5 flex size-3 items-center justify-center rounded-full bg-background',
+            'flex size-10 shrink-0 items-center justify-center rounded-full',
+            snapshot.status === 'online' && 'bg-[var(--status-success-background)] text-[var(--status-success)]',
+            snapshot.status === 'offline' && 'bg-[var(--status-error-background)] text-[var(--status-error)]',
+            snapshot.status === 'checking' && 'bg-[var(--status-warning-background)] text-[var(--status-warning)]',
           )}
-          aria-hidden
         >
-          <span
-            className={cn(
-              'size-2 rounded-full',
-              snapshot.status === 'online' && 'bg-[var(--status-success)]',
-              snapshot.status === 'offline' && 'bg-[var(--status-error)]',
-              snapshot.status === 'checking' && 'bg-[var(--status-warning)]',
-            )}
-          />
-          {snapshot.status === 'online' ? (
-            <span className="absolute size-2 rounded-full bg-[var(--status-success)] opacity-30" />
-          ) : null}
+          <Icon name={snapshot.status === 'checking' ? 'loader-4' : 'server'} className={cn('size-5', snapshot.status === 'checking' && 'animate-spin')} />
         </span>
-      </button>
-
-      <MobileOverlayPanel open={open} onClose={() => onOpenChange(false)} title={t('mobile.android.health.title')}>
-        <div className="space-y-4 p-4">
-          <section className="space-y-3 rounded-xl border border-border/40 bg-[var(--surface-elevated)] p-3">
-            <div className="flex items-center gap-3">
-              <span
-                className={cn(
-                  'flex size-10 shrink-0 items-center justify-center rounded-full',
-                  snapshot.status === 'online' && 'bg-[var(--status-success-background)] text-[var(--status-success)]',
-                  snapshot.status === 'offline' && 'bg-[var(--status-error-background)] text-[var(--status-error)]',
-                  snapshot.status === 'checking' && 'bg-[var(--status-warning-background)] text-[var(--status-warning)]',
-                )}
-              >
-                <Icon name={snapshot.status === 'checking' ? 'loader-4' : 'server'} className={cn('size-5', snapshot.status === 'checking' && 'animate-spin')} />
-              </span>
-              <div className="min-w-0 flex-1">
-                <div className="truncate typography-ui-label text-foreground">{label}</div>
-                <div className="truncate typography-micro text-muted-foreground">
-                  {currentServer?.label || currentServer?.url || t('mobile.android.current.unknown')}
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-2 rounded-lg bg-[var(--surface-muted)] p-3">
-              <div className="flex items-center justify-between gap-3">
-                <span className="typography-meta text-muted-foreground">{t('mobile.android.health.latency')}</span>
-                <span className="typography-ui-label text-foreground">
-                  {snapshot.latencyMs !== null ? formatAndroidHealthLatency(snapshot.latencyMs, t) : t('mobile.android.health.latencyUnknown')}
-                </span>
-              </div>
-              <div className="flex items-center justify-between gap-3">
-                <span className="typography-meta text-muted-foreground">{t('mobile.android.health.lastChecked')}</span>
-                <span className="typography-ui-label text-foreground">
-                  {checkedAt ?? t('mobile.android.health.notChecked')}
-                </span>
-              </div>
-              {snapshot.error ? (
-                <div className="flex items-start justify-between gap-3">
-                  <span className="typography-meta text-muted-foreground">{t('mobile.android.health.error')}</span>
-                  <span className="min-w-0 flex-1 break-words text-right typography-meta text-[var(--status-error)]">{snapshot.error}</span>
-                </div>
-              ) : null}
-            </div>
-
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="w-full"
-              disabled={isRefreshing}
-              onClick={() => void refresh()}
-            >
-              <Icon name="refresh" className={cn('size-4', isRefreshing && 'animate-spin')} />
-              {isRefreshing ? t('mobile.android.health.refreshing') : t('mobile.android.health.refresh')}
-            </Button>
-          </section>
+        <div className="min-w-0 flex-1">
+          <div className="truncate typography-ui-label text-foreground">{label}</div>
+          <div className="truncate typography-micro text-muted-foreground">
+            {currentServer?.label || currentServer?.url || t('mobile.android.current.unknown')}
+          </div>
         </div>
-      </MobileOverlayPanel>
-    </>
+      </div>
+
+      <div className="space-y-2 rounded-lg bg-[var(--surface-muted)] p-3">
+        <div className="flex items-center justify-between gap-3">
+          <span className="typography-meta text-muted-foreground">{t('mobile.android.health.latency')}</span>
+          <span className="typography-ui-label text-foreground">
+            {snapshot.latencyMs !== null ? formatAndroidHealthLatency(snapshot.latencyMs, t) : t('mobile.android.health.latencyUnknown')}
+          </span>
+        </div>
+        <div className="flex items-center justify-between gap-3">
+          <span className="typography-meta text-muted-foreground">{t('mobile.android.health.lastChecked')}</span>
+          <span className="typography-ui-label text-foreground">
+            {checkedAt ?? t('mobile.android.health.notChecked')}
+          </span>
+        </div>
+        {snapshot.error ? (
+          <div className="flex items-start justify-between gap-3">
+            <span className="typography-meta text-muted-foreground">{t('mobile.android.health.error')}</span>
+            <span className="min-w-0 flex-1 break-words text-right typography-meta text-[var(--status-error)]">{snapshot.error}</span>
+          </div>
+        ) : null}
+      </div>
+
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        className="w-full"
+        disabled={isRefreshing}
+        onClick={() => void refresh()}
+      >
+        <Icon name="refresh" className={cn('size-4', isRefreshing && 'animate-spin')} />
+        {isRefreshing ? t('mobile.android.health.refreshing') : t('mobile.android.health.refresh')}
+      </Button>
+    </section>
   );
 };
 
@@ -1053,6 +1112,7 @@ const AndroidServerPanel: React.FC<{
   const { t } = useI18n();
   const [state, setState] = React.useState<AndroidState | null>(null);
   const [showNew, setShowNew] = React.useState(false);
+  const [editingServer, setEditingServer] = React.useState<AndroidServer | null>(null);
   const [busyId, setBusyId] = React.useState<string | null>(null);
   const [status, setStatus] = React.useState<string | null>(null);
 
@@ -1060,6 +1120,7 @@ const AndroidServerPanel: React.FC<{
     if (!open) return;
     void fetchAndroidState().then(setState);
     setShowNew(false);
+    setEditingServer(null);
     setStatus(null);
   }, [open]);
 
@@ -1104,23 +1165,39 @@ const AndroidServerPanel: React.FC<{
     window.location.reload();
   }, []);
 
+  const currentServer = React.useMemo(() => (
+    state?.servers.find((server) => server.id === state.currentServerId) ?? null
+  ), [state]);
+
   if (!open) return null;
 
   return (
     <MobileOverlayPanel open={open} onClose={onClose} title={t('mobile.android.switch.title')}>
-      {showNew ? (
+      {showNew || editingServer ? (
         <AndroidServerLogin
-          title={t('mobile.android.login.title')}
-          description={t('mobile.android.login.description')}
+          title={editingServer ? t('mobile.android.edit.title') : t('mobile.android.login.title')}
+          description={editingServer ? t('mobile.android.edit.description') : t('mobile.android.login.description')}
           servers={[]}
           onConnected={onConnected}
           onStateChanged={setState}
-          onCancel={() => setShowNew(false)}
+          onCancel={() => {
+            setShowNew(false);
+            setEditingServer(null);
+          }}
+          initialEditingServer={editingServer}
+          onEditFinished={() => {
+            setShowNew(false);
+            setEditingServer(null);
+          }}
           embedded
         />
       ) : (
         <div className="space-y-4 p-4">
           {status ? <div className="rounded-xl border border-border/40 bg-[var(--surface-elevated)] p-3 typography-meta text-muted-foreground">{status}</div> : null}
+          <AndroidServerHealthSummary
+            enabled={open && Boolean(state?.configured)}
+            currentServer={currentServer}
+          />
           {state?.configured ? (
             <section className="space-y-2 rounded-xl border border-border/40 bg-[var(--surface-elevated)] p-3">
               <div className="flex items-center gap-3">
@@ -1128,12 +1205,9 @@ const AndroidServerPanel: React.FC<{
                 <div className="min-w-0 flex-1">
                   <div className="typography-micro uppercase text-muted-foreground">{t('mobile.android.current.title')}</div>
                   <div className="truncate typography-ui-label text-foreground">
-                    {(state.servers.find((server) => server.id === state.currentServerId)?.label)
-                      || (state.servers.find((server) => server.id === state.currentServerId)?.url)
-                      || t('mobile.android.current.unknown')}
+                    {currentServer?.label || currentServer?.url || t('mobile.android.current.unknown')}
                   </div>
                 </div>
-                <AndroidServerReachabilityBadge enabled={open && state.configured} />
               </div>
               <button
                 type="button"
@@ -1165,6 +1239,17 @@ const AndroidServerPanel: React.FC<{
                     <span className="block truncate typography-micro text-muted-foreground">{server.url}</span>
                   </button>
                   {busyId === server.id ? <Icon name="loader-4" className="size-4 animate-spin text-muted-foreground" /> : null}
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="flex size-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-interactive-hover hover:text-foreground disabled:opacity-60"
+                    aria-label={`${t('mobile.android.action.edit')} ${server.label || server.url}`}
+                    disabled={busyId !== null}
+                    onClick={() => setEditingServer(server)}
+                  >
+                    <Icon name="edit" className="size-4" />
+                  </Button>
                   <button
                     type="button"
                     className="flex size-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-interactive-hover hover:text-foreground disabled:opacity-60"
@@ -2311,14 +2396,10 @@ const MobileHeader: React.FC<{
   metadataOpen: boolean;
   onMetadataOpenChange: (open: boolean | ((open: boolean) => boolean)) => void;
   androidHealthEnabled: boolean;
-  androidHealthOpen: boolean;
-  onAndroidHealthOpenChange: (open: boolean) => void;
-  currentAndroidServer: AndroidServer | null;
+  onOpenAndroidServerPanel: () => void;
 }> = ({
   androidHealthEnabled,
-  androidHealthOpen,
-  currentAndroidServer,
-  onAndroidHealthOpenChange,
+  onOpenAndroidServerPanel,
   onOpenSessions,
   onOpenMenu,
   metadataOpen,
@@ -2356,31 +2437,27 @@ const MobileHeader: React.FC<{
 
   React.useEffect(() => {
     onMetadataOpenChange(false);
-    onAndroidHealthOpenChange(false);
-  }, [currentSessionId, effectiveDirectory, onAndroidHealthOpenChange, onMetadataOpenChange]);
+  }, [currentSessionId, effectiveDirectory, onMetadataOpenChange]);
 
   const handleOpenSessions = React.useCallback(() => {
     onMetadataOpenChange(false);
-    onAndroidHealthOpenChange(false);
     onOpenSessions();
-  }, [onAndroidHealthOpenChange, onMetadataOpenChange, onOpenSessions]);
+  }, [onMetadataOpenChange, onOpenSessions]);
 
   const handleOpenMenu = React.useCallback(() => {
     onMetadataOpenChange(false);
-    onAndroidHealthOpenChange(false);
     onOpenMenu();
-  }, [onAndroidHealthOpenChange, onMetadataOpenChange, onOpenMenu]);
+  }, [onMetadataOpenChange, onOpenMenu]);
 
-  const handleAndroidHealthOpenChange = React.useCallback((open: boolean) => {
-    if (open) onMetadataOpenChange(false);
-    onAndroidHealthOpenChange(open);
-  }, [onAndroidHealthOpenChange, onMetadataOpenChange]);
+  const handleOpenAndroidServerPanel = React.useCallback(() => {
+    onMetadataOpenChange(false);
+    onOpenAndroidServerPanel();
+  }, [onMetadataOpenChange, onOpenAndroidServerPanel]);
 
   const handleMetadataOpenChange = React.useCallback((nextOpen: boolean | ((open: boolean) => boolean)) => {
     const resolvedOpen = typeof nextOpen === 'function' ? nextOpen(metadataOpen) : nextOpen;
-    if (resolvedOpen) onAndroidHealthOpenChange(false);
     onMetadataOpenChange(resolvedOpen);
-  }, [metadataOpen, onAndroidHealthOpenChange, onMetadataOpenChange]);
+  }, [metadataOpen, onMetadataOpenChange]);
 
   return (
     <>
@@ -2410,11 +2487,9 @@ const MobileHeader: React.FC<{
             secondaryLabel={secondaryLabel}
           />
 
-          <AndroidServerHealthButton
+          <AndroidServerStatusButton
             enabled={androidHealthEnabled}
-            open={androidHealthOpen}
-            onOpenChange={handleAndroidHealthOpenChange}
-            currentServer={currentAndroidServer}
+            onClick={handleOpenAndroidServerPanel}
           />
 
           <button
@@ -2446,7 +2521,6 @@ const MobileShell: React.FC<{ onActiveConnectionDeleted: () => void }> = ({ onAc
   const [settingsInitialMobileStage, setSettingsInitialMobileStage] = React.useState<'nav' | 'page-content'>('nav');
   const [overflowOpen, setOverflowOpen] = React.useState(false);
   const [androidServerPanelOpen, setAndroidServerPanelOpen] = React.useState(false);
-  const [androidHealthOpen, setAndroidHealthOpen] = React.useState(false);
   const [androidState, setAndroidState] = React.useState<AndroidState | null>(null);
   // When set, the Changes surface opens directly into the per-file diff for this path.
   const [pendingChangesDiff, setPendingChangesDiff] = React.useState<{ path: string; staged: boolean } | null>(null);
@@ -2466,10 +2540,6 @@ const MobileShell: React.FC<{ onActiveConnectionDeleted: () => void }> = ({ onAc
   React.useEffect(() => {
     void fetchAndroidState().then(setAndroidState);
   }, []);
-
-  const currentAndroidServer = React.useMemo(() => (
-    androidState?.servers.find((server) => server.id === androidState.currentServerId) ?? null
-  ), [androidState]);
 
   const mobileActions = React.useMemo<MobileAppActions>(
     () => ({
@@ -2553,10 +2623,6 @@ const MobileShell: React.FC<{ onActiveConnectionDeleted: () => void }> = ({ onAc
       setAndroidServerPanelOpen(false);
       return true;
     }
-    if (androidHealthOpen) {
-      setAndroidHealthOpen(false);
-      return true;
-    }
     if (metadataOpen) {
       setMetadataOpen(false);
       return true;
@@ -2594,11 +2660,11 @@ const MobileShell: React.FC<{ onActiveConnectionDeleted: () => void }> = ({ onAc
       return true;
     }
     return false;
-  }, [androidHealthOpen, androidServerPanelOpen, changesOpen, closeChanges, filesOpen, instancesOpen, mcpOpen, metadataOpen, overflowOpen, sessionsSheetOpen, settingsOpen, updateOpen]);
+  }, [androidServerPanelOpen, changesOpen, closeChanges, filesOpen, instancesOpen, mcpOpen, metadataOpen, overflowOpen, sessionsSheetOpen, settingsOpen, updateOpen]);
 
   useNativeAndroidBackButton(handleNativeBack);
   useAndroidBackHandler(
-    androidServerPanelOpen || androidHealthOpen || metadataOpen || overflowOpen || sessionsSheetOpen || filesOpen || changesOpen || mcpOpen || instancesOpen || settingsOpen || updateOpen,
+    androidServerPanelOpen || metadataOpen || overflowOpen || sessionsSheetOpen || filesOpen || changesOpen || mcpOpen || instancesOpen || settingsOpen || updateOpen,
     () => {
       handleNativeBack();
     },
@@ -2683,14 +2749,6 @@ const MobileShell: React.FC<{ onActiveConnectionDeleted: () => void }> = ({ onAc
           onSelect: () => setInstancesOpen(true),
         });
       }
-      if (androidState?.android) {
-        items.push({
-          key: 'android-server',
-          icon: 'server',
-          label: t('mobile.android.switch.menuItem'),
-          onSelect: () => setAndroidServerPanelOpen(true),
-        });
-      }
       if (showUpdateItem) {
         items.push({
           key: 'update',
@@ -2710,7 +2768,7 @@ const MobileShell: React.FC<{ onActiveConnectionDeleted: () => void }> = ({ onAc
       });
       return items;
     },
-    [androidState?.android, dirtyChangeCount, showCapacitorOnlyFeatures, showUpdateItem, t],
+    [dirtyChangeCount, showCapacitorOnlyFeatures, showUpdateItem, t],
   );
 
   return (
@@ -2725,9 +2783,7 @@ const MobileShell: React.FC<{ onActiveConnectionDeleted: () => void }> = ({ onAc
           metadataOpen={metadataOpen}
           onMetadataOpenChange={setMetadataOpen}
           androidHealthEnabled={Boolean(androidState?.android && androidState.configured)}
-          androidHealthOpen={androidHealthOpen}
-          onAndroidHealthOpenChange={setAndroidHealthOpen}
-          currentAndroidServer={currentAndroidServer}
+          onOpenAndroidServerPanel={() => setAndroidServerPanelOpen(true)}
         />
         <main ref={chatMainRef} className="relative min-h-0 flex-1 overflow-hidden" data-page-scroll-lock="true">
           <div ref={chatAnimRef} className="h-full w-full">

@@ -599,6 +599,23 @@ public class MainActivity extends Activity {
                 writeJson(output, 200, response);
                 return;
             }
+            if ("POST".equals(request.method) && "/__android/update-server".equals(request.path)) {
+                JSONObject body = request.body.length == 0 ? new JSONObject() : new JSONObject(new String(request.body, StandardCharsets.UTF_8));
+                String id = body.optString("id", "");
+                if (id.isEmpty() || findServer(id) == null) {
+                    writeError(output, 404, "Server not found");
+                    return;
+                }
+                Server server = upsertServer(id, body.optString("label", ""), body.optString("url", ""), body.has("password") ? body.optString("password", "") : null);
+                if (server == null) {
+                    writeError(output, 400, "Invalid server address");
+                    return;
+                }
+                JSONObject response = new JSONObject();
+                response.put("state", stateJson());
+                writeJson(output, 200, response);
+                return;
+            }
             if ("POST".equals(request.method) && "/__android/logout".equals(request.path)) {
                 prefs.edit().remove(PREF_CURRENT_ID).apply();
                 clearLocalWebViewCookies();
