@@ -1527,14 +1527,14 @@ const fetchZaiQuota = async (): Promise<ProviderResult> => {
 
     const payload = await response.json() as ZaiPayload;
     const limits = Array.isArray(payload?.data?.limits) ? payload.data.limits : [];
-    const tokensLimit = limits.find((limit: Record<string, unknown>) => limit?.type === 'TOKENS_LIMIT');
-    const windowSeconds = resolveWindowSeconds(tokensLimit as Record<string, unknown> | undefined);
-    const windowLabel = resolveWindowLabel(windowSeconds);
-    const resetAt = tokensLimit?.nextResetTime ? normalizeTimestamp(tokensLimit.nextResetTime) : null;
-    const usedPercent = typeof tokensLimit?.percentage === 'number' ? tokensLimit.percentage : null;
+    const tokensLimits = limits.filter((limit: Record<string, unknown>) => limit?.type === 'TOKENS_LIMIT');
 
     const windows: Record<string, UsageWindow> = {};
-    if (tokensLimit) {
+    for (const tokensLimit of tokensLimits) {
+      const windowSeconds = resolveWindowSeconds(tokensLimit as Record<string, unknown> | undefined);
+      const windowLabel = resolveWindowLabel(windowSeconds);
+      const resetAt = tokensLimit?.nextResetTime ? normalizeTimestamp(tokensLimit.nextResetTime) : null;
+      const usedPercent = typeof tokensLimit?.percentage === 'number' ? tokensLimit.percentage : null;
       windows[windowLabel] = toUsageWindow({
         usedPercent,
         windowSeconds,
